@@ -24,9 +24,31 @@ FROM CTE WHERE id=id1 AND id1=id2 AND num=num1 =
 
 ## 2 Problem 2 :Number of Passengers in Each Bus 	(	https://leetcode.com/problems/the-number-of-passengers-in-each-bus-i/ )
 <br>
+## Get each passenger's boarding time
+WITH t AS
+(
+    SELECT passenger_id, MIN(b.arrival_time) AS arrival_time
+    FROM Passengers p
+    INNER JOIN Buses b
+    ON p.arrival_time <= b.arrival_time
+    GROUP BY passenger_id
+)
 
-## 3 Problem 3 :User Activity		(https://leetcode.com/problems/user-activity-for-the-past-30-days-i/ )
+# Boarding time and bus id have 1 to 1 correspondence
+SELECT bus_id, COUNT(t.arrival_time) AS passengers_cnt
+FROM Buses b
+LEFT JOIN t
+ON b.arrival_time = t.arrival_time
+GROUP BY bus_id
+ORDER BY bus_id
+
+
+## 3 Problem 3 :User Activity		(https://leetcode.com/problems/user-activity-for-the-pa-30-days-i/ )
 <br>
+SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+FROM Activity
+WHERE (activity_date > "2019-06-27" AND activity_date <= "2019-07-27")
+GROUP BY activity_date;
 
 ## 4 Problem 4 :Dynamic Pivoting of a Table	(	https://leetcode.com/problems/dynamic-pivoting-of-a-table/ )
 <br>
